@@ -1,0 +1,144 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/api.js"></script>
+		<script type="text/javascript" src="js/script.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<title>Jogos</title>
+	</head>
+	<body onload="mostrarJogos()">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<div class="container-fluid">
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					    <li class="nav-item">
+					        <a class="nav-link active" href="index.html">Jogos</a>
+					    </li>
+					</ul>
+					<form class="d-flex navbar-nav">
+					    <input class="form-control me-2" type="search" placeholder="Pesquise por time A" aria-label="Search" id="pesquisaJogo">
+					    <button class="btn btn-outline-success" type="button" onclick="obterJogosByTimeA()" data-bs-toggle="modal" data-bs-target="#findTimeAModal">Pesquisar</button>
+					</form>
+				</div>
+			</div>
+		</nav>
+
+		<div class="container">
+			<article>
+				<h3>Lista de Jogos</h3>
+				<table class="table table-striped table-hover text-center">
+					<thead>
+					    <tr>
+						    <th scope="col">Id</th>
+						    <th scope="col">Time A</th>
+						    <th scope="col">Time B</th>
+						    <th scope="col">Opções</th>
+					    </tr>
+					</thead>
+					<tbody id="jogos">    
+					</tbody>
+				</table>
+
+				<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addJogoModal">
+		  			Adicionar Jogo
+				</button>
+			</article>
+		</div>
+	</body>
+
+	<!--modal add jogo-->
+	<div class="modal fade " id="addJogoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-lg">
+		    <div class="modal-content">
+			    <div class="modal-header">
+			        <h5 class="modal-title" id="exampleModalLabel">Adicionar Novo Jogo</h5>
+			        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			    </div>
+			    <div class="modal-body">
+			        <form>
+						<div class="mb-3">
+							<label for="timeA" class="form-label">Time A</label>
+							<input type="text" id="timeA" class="form-control">
+						</div>
+						<div class="mb-3">
+							<label for="timeB" class="form-label">Time B</label>
+							<input type="text" id="timeB" class="form-control">
+						</div>
+						<div class="mb-3">
+							<label for="golsA" class="form-label">Gols do time A</label>
+							<input type="text" id="golsA" class="form-control">
+						</div>
+						<div class="mb-3">
+							<label for="golsB" class="form-label">Gols do time B</label>
+							<input type="text" id="golsB" class="form-control">
+						</div>
+					</form>	
+			    </div>
+			    <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+			        <button type="button" class="btn btn-primary" onclick="adicionarJogo()">Salvar</button>
+			    </div>
+		    </div>
+		</div>
+	</div>
+
+	<!--modal edit jogo-->
+	<div class="modal fade " id="editJogoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+		    <div class="modal-content">
+			    <div class="modal-header">
+			        <h5 class="modal-title" id="exampleModalLabel">Editar Jogo</h5>
+			        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			    </div>
+			    <div class="modal-body">
+			        <form>
+						<div class="mb-3">
+							<label for="idJogo" class="form-label">Id</label>
+							<input type="text" id="idJogo" class="form-control" disabled>
+						</div>			
+						<div class="mb-3">
+							<label for="timeAUpdate" class="form-label">Time A</label>
+							<input type="text" id="timeAUpdate" class="form-control">
+						</div>	
+						<div class="mb-3">
+							<label for="timeBUpdate" class="form-label">Time B</label>
+							<input type="text" id="timeBUpdate" class="form-control">
+						</div>	
+						<div class="mb-3">
+							<label for="golsAUpdate" class="form-label">Gols do time A</label>
+							<input type="text" id="golsAUpdate" class="form-control">
+						</div>
+						<div class="mb-3">
+							<label for="golsBUpdate" class="form-label">Gols do time B</label>
+							<input type="text" id="golsBUpdate" class="form-control">
+						</div>
+					</form>
+			    </div>
+			    <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+			        <button type="button" class="btn btn-primary" onclick="atualizarJogo()">Atualizar</button>
+			    </div>
+		    </div>
+		</div>
+	</div>
+
+	<!--modal listar jogos-->
+	<div class="modal fade " id="findTimeAModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog  modal-xl">
+		    <div class="modal-content">
+			    <div class="modal-header">
+			        <h5 class="modal-title" id="exampleModalLabel">Resultados para a pesquisa</h5>
+			        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			    </div>
+			    <div class="modal-body" id="buscaJogos">
+			        
+			    </div>
+			    <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+			    </div>
+		    </div>
+		</div>
+	</div>
+</html>
